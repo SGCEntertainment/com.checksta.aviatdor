@@ -4,12 +4,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject menu;
-    [SerializeField] GameObject shop;
     [SerializeField] GameObject game;
-
-    [Space(10)]
-    [SerializeField] GameObject airplanes;
-    [SerializeField] GameObject backgrounds;
 
     [Space(10)]
     [SerializeField] GameObject bet;
@@ -19,12 +14,20 @@ public class UIManager : MonoBehaviour
     [Space(10)]
     [SerializeField] Text bidText;
 
+    [Space(10)]
+    [SerializeField] Button[] btns;
+
     private void Awake()
     {
         Airplane.OnStartFly += () =>
         {
             bet.SetActive(false);
             cancel.SetActive(true);
+
+            foreach(Button b in btns)
+            {
+                b.interactable = false;
+            }
         };
 
         Airplane.OnGrowing += () =>
@@ -38,6 +41,11 @@ public class UIManager : MonoBehaviour
             cashOut.SetActive(false);
             cancel.SetActive(false);
             bet.SetActive(true);
+
+            foreach (Button b in btns)
+            {
+                b.interactable = true;
+            }
         };
     }
 
@@ -46,29 +54,11 @@ public class UIManager : MonoBehaviour
         bidText.text = $"{GameManager.Instance.bidCount}";
     }
 
-    public void OpenShop(int id)
-    {
-        menu.SetActive(false);
-        shop.SetActive(true);
-
-        if (id == 0)
-        {
-            airplanes.SetActive(true);
-            backgrounds.SetActive(false);
-        }
-        else if (id == 1)
-        {
-            airplanes.SetActive(false);
-            backgrounds.SetActive(true);
-        }
-    }
-
     public void Menu()
     {
         Cancel();
 
         game.SetActive(false);
-        shop.SetActive(false);
         menu.SetActive(true);
     }
 
